@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { createContext, useReducer } from "react";
 
-function App() {
+import { Container } from "react-bootstrap";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.scss";
+import "./assets/fonts/SegoeUI/SegoeUI_Fonts.css";
+
+import Footer from "./layout/Footer";
+import Header from "./layout/Header";
+import MyUserReducer from "./reducers/MyUserReducer";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Post from "./components/commons/PostList/PostList";
+import Homepage from "./components/pages/Home/Homepage";
+import Sidebar from "./layout/components/Sidebar/Sidebar";
+import { Col, Row } from "react-bootstrap/esm";
+
+export const MyUserContext = createContext();
+export const MyDispatchContext = createContext();
+
+const App = () => {
+  const [user, dispatch] = useReducer(MyUserReducer, null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MyUserContext.Provider value={user}>
+      <MyDispatchContext.Provider value={dispatch}>
+        <BrowserRouter>
+          <div className="layout-header">{/* <Header /> */}</div>
+
+          <div className="layout-main">
+            <div className="layout-main__sidebar">
+              <Sidebar />
+            </div>
+            <div className="layout-main__container">
+              <Container >
+                <Row className="justify-content-md-center">
+                  <Col xs={6}>
+                    <Routes>
+                      <Route path="/" element={<Homepage />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      {/* <Route path="/home" element={<Homepage />} /> */}
+                    </Routes>
+                  </Col>
+                  <Col xs={3} height="100">1 of 3</Col>
+                </Row>
+              </Container>
+            </div>
+          </div>
+
+          {/* <Footer /> */}
+        </BrowserRouter>
+      </MyDispatchContext.Provider>
+    </MyUserContext.Provider>
   );
-}
+};
 
 export default App;
