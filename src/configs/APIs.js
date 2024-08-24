@@ -1,23 +1,44 @@
-import axios from "axios"
+import axios from "axios";
+import cookie from "react-cookies";
 // import cookie from "react-cookies"
 
-const BASE_URL = 'http://26.83.215.211:8080/ounetworksv/api/'
+const BASE_URL = "http://localhost:8080/ounetworksv/api/";
 
 export const endpoints = {
-    'login': '/v1/public/auth/login',
-    'register': '/v1/public/auth/register',
-    'posts': '/v1/private/posts/get',
-}
+  login: "v1/public/auth/login",
+  register: "/v1/public/auth/register",
+  posts: "/v1/private/posts/get",
+};
 
-// export const authAPIs = () => {
-//     return axios.create({
-//         baseURL: BASE_URL,
-//         headers: {
-//             'Authorization': cookie.load("access-token")
-//         }
-//     })
-// }
+export const apiCaller = (endpoint, options = {}) => {
+  const token = cookie.load("access-token")
+    ? cookie.load("access-token")
+    : null;
 
-export default axios.create({
-    baseURL: BASE_URL
-});
+  // Kiểm tra nếu endpoint có chứa "public" thì thêm Authorization header
+  const headers = {
+    "Content-Type": "application/json",
+    ...(endpoint.includes("private") && token
+      ? { Authorization: `Bearer ${token}` }
+      : {}),
+    ...options.headers,
+  };
+
+
+
+  // Tạo instance của Axios với cấu hình
+  const apiInstance = axios.create({
+    baseURL: BASE_URL,
+    withCredentials: true, // Nếu bạn cần gửi cookie cùng request
+    headers: headers,
+    ...options, // Gộp các tùy chọn khác như params, timeout, etc.
+  });
+
+  // Trả về một đối tượng với các phương thức của axios (get, post, etc.)
+  return {
+    get: (params) => apiInstance.get(endpoint, { params }),
+    post: (data) => apiInstance.post(endpoint, data),
+    put: (data) => apiInstance.put(endpoint, data),
+    delete: (params) => apiInstance.delete(endpoint, { params }),
+  };
+};

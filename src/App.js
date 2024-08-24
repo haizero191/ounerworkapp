@@ -1,58 +1,72 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
-import { Container } from "react-bootstrap";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./App.scss";
 import "./assets/fonts/SegoeUI/SegoeUI_Fonts.css";
 
-import Footer from "./layout/Footer";
-import Header from "./layout/Header";
-import MyUserReducer from "./reducers/MyUserReducer";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Post from "./components/commons/PostList/PostList";
-import Homepage from "./components/pages/Home/Homepage";
-import Sidebar from "./layout/components/Sidebar/Sidebar";
-import { Col, Row } from "react-bootstrap/esm";
+
+
+import Login from "./components/pages/Login/Login";
+
+import { Provider, useSelector } from "react-redux";
+import store from "./redux/store";
+
+import NewFeedLayout from "./layout/NewFeedLayout/NewFeedLayout";
+import Home from "./components/pages/Home/Home";
+import { useNavigate } from "react-router-dom";
+import cookies from "react-cookies";
+import PrivateRoute from "./layout/components/PrivateRoute/PrivateRoute";
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
 
 const App = () => {
-  const [user, dispatch] = useReducer(MyUserReducer, null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const state = useSelector((state) => state);
+
+  // Check user login
+  useEffect(() => {
+    if (isLogin) {
+      setIsAuthenticated(true);
+    }
+    else {
+      setIsAuthenticated(true);
+    }
+  }, [location]);
+
+  const isLogin = () => {
+    try {
+      const payload = JSON.parse(
+        atob(cookies.load("access-token").split(".")[1])
+      );
+      const exp = payload.exp * 1000; // Convert expiration to milliseconds
+      return Date.now() < exp;
+    } catch (e) {
+      return false;
+    }
+  };
 
   return (
-    <MyUserContext.Provider value={user}>
-      <MyDispatchContext.Provider value={dispatch}>
-        <BrowserRouter>
-          <div className="layout-header">{/* <Header /> */}</div>
+    <Routes>
+      {/* HOME LAYOUT */}
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <NewFeedLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route index element={<Home />} />
+      </Route>
 
-          <div className="layout-main">
-            <div className="layout-main__sidebar">
-              <Sidebar />
-            </div>
-            <div className="layout-main__container">
-              <Container >
-                <Row className="justify-content-md-center">
-                  <Col xs={6}>
-                    <Routes>
-                      <Route path="/" element={<Homepage />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      {/* <Route path="/home" element={<Homepage />} /> */}
-                    </Routes>
-                  </Col>
-                  <Col xs={3} height="100">1 of 3</Col>
-                </Row>
-              </Container>
-            </div>
-          </div>
-
-          {/* <Footer /> */}
-        </BrowserRouter>
-      </MyDispatchContext.Provider>
-    </MyUserContext.Provider>
+      {/* LOGIN LAYOUT */}
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 };
 

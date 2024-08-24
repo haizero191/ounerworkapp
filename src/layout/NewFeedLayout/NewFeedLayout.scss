@@ -1,0 +1,31 @@
+.NewFeedLayout {
+    .layout-main {
+        display: flex;
+        font-family: "Segoe UI Regular";
+        height: 100%;
+        .layout-main__sidebar {
+            flex-basis: 245px;
+            height: auto;
+            flex-shrink: 1;
+            position: relative;
+            border-right: 1px solid #ddd;
+        }
+
+        .layout-main__container {
+            flex-grow: 1;
+            padding-top: 36px;
+            .container {
+                height: 100%;
+                .row {
+                    height: 100%;
+                }
+            }
+
+            .personal-side {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+        }
+    }
+}

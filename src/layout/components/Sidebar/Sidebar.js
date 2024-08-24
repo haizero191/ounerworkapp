@@ -12,7 +12,7 @@ const Sidebar = () => {
         <Nav.Link className="nav-link" as={NavLink} to="/">
           <div className="nav-icon">
             <div className="nav-icon_container">
-              <i class="bi bi-house"></i>
+              <i className="bi bi-house"></i>
               <span>Trang chủ</span>
             </div>
           </div>
@@ -20,7 +20,7 @@ const Sidebar = () => {
         <Nav.Link eventKey="link-2" as={NavLink} to="/search">
           <div className="nav-icon">
             <div className="nav-icon_container">
-              <i class="bi bi-search"></i>
+              <i className="bi bi-search"></i>
               <span>Tìm kiếm</span>
             </div>
           </div>
@@ -28,7 +28,7 @@ const Sidebar = () => {
         <Nav.Link eventKey="link-2" as={NavLink} to="/explore">
           <div className="nav-icon">
             <div className="nav-icon_container">
-              <i class="bi bi-compass"></i>
+              <i className="bi bi-compass"></i>
               <span>Khám phá</span>
             </div>
           </div>
@@ -36,7 +36,7 @@ const Sidebar = () => {
         <Nav.Link eventKey="link-2">
           <div className="nav-icon">
             <div className="nav-icon_container">
-              <i class="bi bi-chat-heart"></i>
+              <i className="bi bi-chat-heart"></i>
               <span>Tin nhắn</span>
             </div>
           </div>
@@ -44,7 +44,7 @@ const Sidebar = () => {
         <Nav.Link eventKey="link-2">
           <div className="nav-icon">
             <div className="nav-icon_container">
-              <i class="bi bi-bell"></i>
+              <i className="bi bi-bell"></i>
               <span>Thông báo</span>
             </div>
           </div>

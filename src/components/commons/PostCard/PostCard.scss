@@ -1,7 +1,18 @@
 .PostCard {
     min-width: 470px;
     max-width: 470px;
-
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
     height: auto;
     background-color: #ffffff;
     padding: 8px;
@@ -33,22 +44,29 @@
         .info {
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
             p {
                 margin: 0;
                 font-size: 12px;
             }
 
             .name {
-                font-family: "Segoe UI Bold";
                 font-size: 14px;
+                width: 100%;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+                .time {
+                    font-weight: 400;
+                    font-size: 12px;
+                    margin-left: 8px;
+                }
             }
         }
     }
 
     .post-card_media {
-
         height: auto;
-        border-radius: 4px;
         overflow: hidden;
         img {
             width: 100%;
@@ -67,7 +85,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background-color: red;
             transform: translateX(-10px);
             flex-basis: 40%;
             .icon {
@@ -89,7 +106,6 @@
                     justify-content: center;
                     font-family: "Segoe UI Bold";
                     font-weight: 700;
-      
                 }
             }
             .love {
@@ -97,7 +113,6 @@
             }
             .share i {
                 font-size: 22px !important;
-
             }
         }
 
@@ -121,37 +136,50 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            font-family: "Segoe UI Bold";
-            font-weight: 300;
+            font-weight: 500;
+
             span {
-                font-size: 14px;
+                font-size: 15px;
             }
         }
-
-        
     }
 
-
-  
     .post-card_content {
         padding-top: 4px;
-
         span {
             font-size: 14px;
             width: fit-content;
+
             &.summary {
-                overflow: hidden;
-                width:100%;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
+                // overflow: hidden;
+                // width:100%;
+                // display: -webkit-box;
+                // -webkit-line-clamp: 2;
+                // -webkit-box-orient: vertical;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                .content {
+                    font-weight: 400;
+                    font-size: 15px;
+                    line-height: 0.2;
+                    letter-spacing: 0.09px;
+                }
             }
-            
+
+            &.detailed {
+                // overflow: hidden;
+                // width:100%;
+                // display: -webkit-box;
+                // -webkit-line-clamp: 3;
+                // -webkit-box-orient: vertical;
+                // font-family: "arial";
+            }
         }
 
-        .detailed {
+        .detailed-btn {
             cursor: pointer;
-            font-family: "Segoe UI Bold";
+            font-weight: 500;
+            opacity: 0.49;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
     }
 
@@ -168,4 +196,15 @@
             outline: none;
         }
     }
+
+    // Class activity
+    .hightlight-major {
+        background-color: rgba(8, 126, 252, 0.747);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 3px;
+        font-size: 12px;
+        height: 100%;
+    }
 }
+
