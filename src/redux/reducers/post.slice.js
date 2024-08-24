@@ -31,8 +31,6 @@ const postSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message;
             });
-
-        
     },
 });
 

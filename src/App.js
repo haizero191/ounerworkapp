@@ -25,31 +25,20 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isApproved, setIsApproved] = useState();
+
+
 
   const state = useSelector((state) => state);
 
   // Check user login
   useEffect(() => {
-    if (isLogin) {
-      setIsAuthenticated(true);
-    }
-    else {
-      setIsAuthenticated(true);
-    }
+  
+    console.log("Isapproved: ", cookies.load("isApproved"))
+    
   }, [location]);
 
-  const isLogin = () => {
-    try {
-      const payload = JSON.parse(
-        atob(cookies.load("access-token").split(".")[1])
-      );
-      const exp = payload.exp * 1000; // Convert expiration to milliseconds
-      return Date.now() < exp;
-    } catch (e) {
-      return false;
-    }
-  };
-
+ 
   return (
     <Routes>
       {/* HOME LAYOUT */}
