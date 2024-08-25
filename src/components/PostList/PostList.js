@@ -15,7 +15,7 @@ const PostList = ({ data }) => {
     <div className="PostList">
       <div className="post-list__inner">
         {data && data.map((post) => {
-          return <PostCard data={post} />;
+          return <PostCard data={post} key={'post-card-' + post.id}/>;
         })}
       </div>
     </div>

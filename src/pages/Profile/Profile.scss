@@ -1,4 +1,6 @@
 .Profile {
+    position: relative;
+    overflow-x: hidden;
     .user-information {
         min-height: 580px;
         margin-bottom: 40px;
@@ -28,46 +30,70 @@
             .information {
                 // background-color: rgb(16, 16, 142);
                 flex-grow: 1;
-                padding-top: 22px;
-
+                margin-top: 22px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
 
-                .name {
-                    text-transform: capitalize;
-                    font-weight: 800;
-                    font-size: 38px;
-                    width: 100%;
-                    p {
-                        margin: 0;
-                        line-height: 40px;
+                .information-l {
+                    flex-basis: 60%;
+                    flex-shrink: 1;
+                    max-width: 60%;
+                    .name {
+                        text-transform: capitalize;
+                        font-weight: 800;
+                        font-size: 38px;
+                        width: 100%;
+                        p {
+                            margin: 0;
+                            line-height: 40px;
+                        }
+                    }
+
+                    .student-info {
+                        padding-left: 2px;
+
+                        p {
+                            text-transform: capitalize;
+                            margin: 0;
+                        }
+                        .university {
+                            font-size: 26px;
+                            text-transform: uppercase;
+                        }
+
+                        .major {
+                            display: flex;
+                            gap: 10px;
+                            p:nth-child(1) {
+                                font-weight: 700;
+                                text-transform: uppercase;
+                                color: #1f487e;
+                                span {
+                                    font-weight: 400;
+                                }
+                            }
+                        }
                     }
                 }
 
-                .student-info {
-                    padding-left: 2px;
-
-                    p {
-                        text-transform: capitalize;
-                        margin: 0;
+                .information-r {
+                    flex-grow: 1;
+                    display: flex;
+                    gap: 10px;
+                    .edit {
+                        cursor: pointer;
+                        padding: 4px 14px;
+                        background-color: #ddd;
+                        border-radius: 4px;
+                        user-select: none;
                     }
-                    .university {
-                        font-size: 26px;
-                        text-transform: uppercase;
-                    }
-
-                    .major {
-                        display: flex;
-                        gap: 10px;
-                        p:nth-child(1) {
-                            font-weight: 700;
-                            text-transform: uppercase;
-                            color: #1f487e;
-                            span {
-                                font-weight: 400;
-                            }
-                        }
+                    .friends {
+                        cursor: pointer;
+                        padding: 4px 10px;
+                        background-color: #ddd;
+                        border-radius: 4px;
+                        user-select: none;
                     }
                 }
             }
@@ -131,7 +157,6 @@
                 width: 100%;
             }
 
-            
             &:nth-child(even) {
                 height: auto;
 

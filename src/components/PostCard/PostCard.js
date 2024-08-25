@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./PostCard.scss";
+import { encryptHTML, decryptHTML } from "../../utils/Crypto";
 
 import GridOne from "../ImageLayout/GridOne/GridOne";
 const PostCard = ({ data }) => {
   const [imgTypePosted, setImgTypePosted] = useState("NOIMAGE");
-
-  const [GridImage, setGridImage] = [
-    {
-      component: "",
-      amount: 0,
-    },
-    {
-      component: "",
-      amount: 1,
-    },
-  ];
 
   // Danh sách tỷ lệ cho các hình đơn
   const aspectRatios = [
@@ -57,7 +47,7 @@ const PostCard = ({ data }) => {
 
   /** Tạo tên đầy đủ cho người dùng */
   const getFullName = (firstName, lastName) => {
-    return firstName + " " +lastName;
+    return firstName + " " + lastName;
   };
 
   /** Ẩn bớt content */
@@ -70,7 +60,10 @@ const PostCard = ({ data }) => {
     const detailBtnElm = e.currentTarget;
     const contentParentElm = detailBtnElm.parentElement;
     const contentElm = contentParentElm.querySelector("span.content");
-    contentElm.innerText = data.content;
+    const summaryContentElem = contentParentElm.querySelector(".content-summary")
+    summaryContentElem.style.maxHeight = "fit-content";
+    summaryContentElem.style.overflow = "auto";
+    contentElm.dangerouslySetInnerHTML = data.content;
     // ẩn xem thêm
     detailBtnElm.style.display = "none";
   };
@@ -105,12 +98,16 @@ const PostCard = ({ data }) => {
     }
   };
 
+  const HtmlContent = ({ html }) => {
+    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  };
+
   return (
     <div className="PostCard">
       <div className="post-card">
         <div className="post-card_header">
           <div className="avatar">
-            <img src="https://productplacementblog.com/wp-content/uploads/2019/11/Apple-MacBook-Laptop-Used-by-Thomas-Middleditch-as-Richard-Hendricks-in-Silicon-Valley-Season-6-Episode-4-4.jpg" />
+            <img src={data.owner.profile.avatar.url} />
           </div>
           <div className="info">
             <p className="name">
@@ -140,7 +137,7 @@ const PostCard = ({ data }) => {
               {data.mediaList.map((media) => {
                 return (
                   <div className={"grid-col"}>
-                    <GridOne media={media} />
+                    <GridOne media={media} key={"post-card-img-" + media.id} />
                   </div>
                 );
               })}
@@ -169,15 +166,13 @@ const PostCard = ({ data }) => {
         <div className="post-card_content">
           <span className="content-summary">
             <span className={"summary"}>
-              <span className="content">{textSummary(data.content)}</span>
-              {data.content.length > 180 ? (
-                <span className="detailed-btn" onClick={onViewDetailContent}>
-                  Xem thêm
-                </span>
-              ) : (
-                <></>
-              )}
+              <span className="content">
+                <HtmlContent html={decryptHTML(data.content)} />
+              </span>
             </span>
+          </span>
+          <span className="detailed-btn" onClick={onViewDetailContent}>
+            Xem thêm
           </span>
         </div>
         <div className="post-card_comments">

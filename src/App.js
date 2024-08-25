@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import cookies from "react-cookies";
 import PrivateRoute from "./layout/components/PrivateRoute/PrivateRoute";
 import Profile from "./pages/Profile/Profile";
+import Register from "./pages/Register/Register";
+
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
@@ -57,6 +59,9 @@ const App = () => {
 
       {/* LOGIN PAGE */}
       <Route path="/login" element={<Login />} />
+
+      {/* REGISTER PAGE */}
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 };

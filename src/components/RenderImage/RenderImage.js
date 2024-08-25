@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-const RenderImage = ({src,containerWidth,containerHeight,aspectRatios}) => {
+const RenderImage = ({
+  src,
+  containerWidth,
+  containerHeight,
+  aspectRatios,
+}) => {
   const [imageDimensions, setImageDimensions] = useState({
     name: "",
     width: 0,
@@ -8,35 +13,41 @@ const RenderImage = ({src,containerWidth,containerHeight,aspectRatios}) => {
   });
 
   useEffect(() => {
+    // Tính tỷ lệ khung hình của hình ảnh hiện tại
+    const imageAspectRatio = containerWidth / containerHeight;
+
     // Hàm điều chỉnh tỷ lệ hình ảnh
     const adjustImageToAspectRatio = (width, height, aspectRatios) => {
       let bestFit = null;
-      let bestFitScale = -Infinity;
+      let closestRatioDifference = Infinity;
 
       aspectRatios.forEach((ratio) => {
-        const targetWidth = ratio.ratioX;
-        const targetHeight = ratio.ratioY;
+        const targetAspectRatio = ratio.ratioX / ratio.ratioY;
+        const ratioDifference = Math.abs(imageAspectRatio - targetAspectRatio);
 
-        const scale = Math.min(width / targetWidth, height / targetHeight);
-
-        if (scale > bestFitScale) {
-          bestFitScale = scale;
+        if (ratioDifference < closestRatioDifference) {
+          closestRatioDifference = ratioDifference;
           bestFit = ratio;
         }
       });
 
       if (bestFit) {
+        const targetWidth = bestFit.ratioX;
+        const targetHeight = bestFit.ratioY;
+
+        const scale = Math.min(width / targetWidth, height / targetHeight);
+
         return {
           name: bestFit.name,
-          width: containerWidth,
-          height: bestFit.ratioY * bestFitScale,
+          width: targetWidth * scale,
+          height: targetHeight * scale,
         };
       }
 
       return null;
     };
 
-    // Giả sử chiều cao container được tính dựa trên chiều rộng và tỷ lệ
+    // Điều chỉnh hình ảnh dựa trên kích thước container và tỷ lệ
     const adjustedImage = adjustImageToAspectRatio(
       containerWidth,
       containerHeight,
@@ -50,14 +61,13 @@ const RenderImage = ({src,containerWidth,containerHeight,aspectRatios}) => {
         height: adjustedImage.height,
       });
     }
-  }, [containerHeight, aspectRatios]);
+  }, [containerWidth, containerHeight, aspectRatios]);
 
   return (
     <img
       src={src}
       width={imageDimensions.width}
-      height={imageDimensions.height}
-      style={{ objectFit: "cover", display: "block" }}
+      height={'auto'}
       alt={imageDimensions.name}
     />
   );

@@ -1,11 +1,11 @@
-.Login {
+.Register {
     width: 100%;
     height: 100vh;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    .login-container {
+    .register-container {
         display: flex;
         width: 80%;
         height: 80%;
@@ -15,7 +15,7 @@
             rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
         border-radius: 8px;
         overflow: hidden;
-        .login-container_left {
+        .register-container_left {
             flex-basis: 50%;
             min-width: 50%;
             height: 100%;
@@ -24,15 +24,22 @@
             justify-content: center;
 
             .subtitle {
-                margin-bottom: 30px;
+                margin-bottom: 10px;
                 color: #b4b1b1;
             }
 
-            .login-form {
+            .subtitle-primary {
+                color: red;
+                font-size: 12px;
+                opacity: 0.96;
+                margin-bottom: 30px;
+            }
+
+            .register-form {
                 padding: 10px 20px;
                 max-width: 460px;
 
-                .login-form-input {
+                .register-form-input {
                     width: 100%;
                     display: flex;
                     flex-direction: column;
@@ -65,12 +72,12 @@
                     }
                 }
 
-                .login-valid {
+                .register-valid {
                     margin-top: 30px;
                     display: flex;
                     flex-direction: column;
                     gap: 8px;
-                    .login-valid_field {
+                    .register-valid_field {
                         display: flex;
                         gap: 10px;
 
@@ -91,42 +98,33 @@
                     }
                 }
 
-                .btn-actions {
+                .register-btn {
+                    background-color: #1b31f4f2;
+                    color: white;
+                    width: fit-content;
+                    height: 40px;
+                    width: 160px;
+                    border-radius: 20px;
+                    margin-top: 40px;
+                    text-transform: uppercase;
+                    font-size: 14px;
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    margin-top: 40px;
-                    .or {
-                        opacity: 0.8;
+                    justify-content: center;
+                    cursor: pointer;
+                    padding: 0px 14px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
                     }
-
-                    .register-link {
-                        text-decoration: underline;
-                        cursor: pointer;
-                    }
-                    .login-btn {
-                        background-color: #1b31f4f2;
-                        color: white;
-                        width: fit-content;
-                        height: 40px;
-                        width: 160px;
-                        border-radius: 20px;
-                        text-transform: uppercase;
-                        font-size: 14px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        &:hover {
-                            filter: brightness(90%);
-                        }
+                    &:hover {
+                        filter: brightness(90%);
                     }
                 }
-
-
             }
         }
-        .login-container_right {
+        .register-container_right {
             flex-basis: 50%;
             min-width: 50%;
             background-color: blue;
