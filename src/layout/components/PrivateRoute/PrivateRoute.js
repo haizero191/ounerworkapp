@@ -13,16 +13,24 @@ const PrivateRoute = ({ children }) => {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const exp = payload.exp * 1000; // Convert expiration to milliseconds
-     
-
-      
       return Date.now() < exp;
     } catch (e) {
       return false;
     }
   };
 
-  return isTokenValid() ? children : <Navigate to="/login" />;
+  const isApproved = () => {
+    if (!token) return false;
+    // Here, you might want to decode the token and check for its expiration, etc.
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.isApproved;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  return isTokenValid() ? ( children ) : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

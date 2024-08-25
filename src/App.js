@@ -5,18 +5,17 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./App.scss";
 import "./assets/fonts/SegoeUI/SegoeUI_Fonts.css";
 
-
-
-import Login from "./components/pages/Login/Login";
+import Login from "./pages/Login/Login";
 
 import { Provider, useSelector } from "react-redux";
 import store from "./redux/store";
 
 import NewFeedLayout from "./layout/NewFeedLayout/NewFeedLayout";
-import Home from "./components/pages/Home/Home";
+import Home from "./pages/Home/Home";
 import { useNavigate } from "react-router-dom";
 import cookies from "react-cookies";
 import PrivateRoute from "./layout/components/PrivateRoute/PrivateRoute";
+import Profile from "./pages/Profile/Profile";
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
@@ -24,24 +23,26 @@ export const MyDispatchContext = createContext();
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isApproved, setIsApproved] = useState();
-
-
-
-  const state = useSelector((state) => state);
+  const approvedPath = ["/", "/home"];
 
   // Check user login
   useEffect(() => {
-  
-    console.log("Isapproved: ", cookies.load("isApproved"))
-    
+
+    if (cookies.load("isApproved") === "false" && approvedPath.includes(location.pathname)) {
+      const isConfirmed = window.confirm(
+        "Tài khoản của bạn chưa được quản trị viên phê duyệt. Hoàn thành hồ sơ cá nhân của bạn chính xác và chờ xác nhận nha :>"
+      );
+      if(isConfirmed) {
+        setTimeout(() => {
+          navigate("/profile");
+        }, 500);
+      }
+    }
   }, [location]);
 
- 
   return (
     <Routes>
-      {/* HOME LAYOUT */}
+      {/* HOME PAGE LAYOUT */}
       <Route
         path="/"
         element={
@@ -51,9 +52,10 @@ const App = () => {
         }
       >
         <Route index element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
-      {/* LOGIN LAYOUT */}
+      {/* LOGIN PAGE */}
       <Route path="/login" element={<Login />} />
     </Routes>
   );

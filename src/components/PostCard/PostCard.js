@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PostCard.scss";
-import RenderImage from "../RenderImage/RenderImage";
+
 import GridOne from "../ImageLayout/GridOne/GridOne";
 const PostCard = ({ data }) => {
   const [imgTypePosted, setImgTypePosted] = useState("NOIMAGE");
@@ -57,7 +57,7 @@ const PostCard = ({ data }) => {
 
   /** Tạo tên đầy đủ cho người dùng */
   const getFullName = (firstName, lastName) => {
-    return firstName + lastName;
+    return firstName + " " +lastName;
   };
 
   /** Ẩn bớt content */

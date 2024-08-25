@@ -1,8 +1,10 @@
 .NewFeedLayout {
+    min-height: 100vh;
+    height: 100vh;
     .layout-main {
         display: flex;
-        font-family: "Segoe UI Regular";
-        height: 100%;
+        height: fit-content;
+        min-height: 100vh;
         .layout-main__sidebar {
             flex-basis: 245px;
             height: auto;

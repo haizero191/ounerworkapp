@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import cookie from "react-cookies";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { USER_ACTION_LOGIN } from "../../../redux/actions/user.action";
+import { USER_ACTION_LOGIN } from "../../redux/actions/user.action";
 import "./Login.scss";
-import Loading from "../../commons/Loading/Loading";
+import Loading from "../../components/Loading/Loading";
 
 const Login = () => {
   const [account, setAccount] = useState({
