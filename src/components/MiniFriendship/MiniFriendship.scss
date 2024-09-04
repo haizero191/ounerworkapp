@@ -12,7 +12,7 @@
         "Helvetica Neue",
         sans-serif;
     .mini-friendship_title {
-        margin-bottom: 38px;
+        margin-bottom: 20px;
         p:nth-child(1) {
             font-weight: 500;
             font-size: 18px;
@@ -51,8 +51,15 @@
                 }
                 p:nth-child(2) {
                     font-size: 12px;
-                    font-weight: 300;
+                    font-weight: 400;
+                    
+                }
+                .status-online {
                     color: rgba(21, 174, 21, 0.858);
+                }
+
+                .status-offline {
+                    color: rgba(191, 56, 6, 0.94);
                 }
             }
             .avatar {

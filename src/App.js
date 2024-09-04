@@ -17,6 +17,9 @@ import cookies from "react-cookies";
 import PrivateRoute from "./layout/components/PrivateRoute/PrivateRoute";
 import Profile from "./pages/Profile/Profile";
 import Register from "./pages/Register/Register";
+import ProfileEdit from "./pages/Profile/ProfileEdit/ProfileEdit";
+
+
 
 
 export const MyUserContext = createContext();
@@ -27,10 +30,16 @@ const App = () => {
   const navigate = useNavigate();
   const approvedPath = ["/", "/home"];
 
-  // Check user login
-  useEffect(() => {
+  const token = cookies.load("access-token");
 
-    if (cookies.load("isApproved") === "false" && approvedPath.includes(location.pathname)) {
+
+  useEffect(() => {
+    ensureUserAprroved();
+  }, [location]);
+
+  // Kiểm tra user đã được xác thực bởi admin chưa
+  const ensureUserAprroved = () => {
+    if (isTokeApproved()) {
       const isConfirmed = window.confirm(
         "Tài khoản của bạn chưa được quản trị viên phê duyệt. Hoàn thành hồ sơ cá nhân của bạn chính xác và chờ xác nhận nha :>"
       );
@@ -40,7 +49,13 @@ const App = () => {
         }, 500);
       }
     }
-  }, [location]);
+  }
+  const isTokeApproved = () => {
+    return (cookies.load("isApproved") === "false" && approvedPath.includes(location.pathname))
+  }
+
+
+  
 
   return (
     <Routes>
@@ -55,6 +70,7 @@ const App = () => {
       >
         <Route index element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/edit" element={<ProfileEdit />} />
       </Route>
 
       {/* LOGIN PAGE */}

@@ -31,7 +31,7 @@ const GridOne = ({ media }) => {
   ];
 
   return (
-    <div className="GridOne" width="100%">
+    <div className="GridOne" width="100%" >
       <RenderImage src={media.url} containerWidth={media.width} containerHeight={media.height} aspectRatios={aspectRatios} />
     </div>
   );

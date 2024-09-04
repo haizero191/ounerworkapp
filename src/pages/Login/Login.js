@@ -13,26 +13,30 @@ const Login = () => {
     password: "",
   });
 
-  /* Get redux state */
+  /* REDUX STATE */
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
-  /* Set cookies */
+  /*=================== COMPONENT CYCLE =====================*/
+
   useEffect(() => {
     if (state.user.data) {
       cookie.save("access-token", state.user.data.accessToken);
-      cookie.save("studentID", state.user.data.user.id);
+      cookie.save("userId", state.user.data.user.id);
       cookie.save("isApproved", state.user.data.user.isApproved);
     }
   }, [state]);
-  console.log(state.user);
 
-  /*  Handle login form changed  */
+
+
+  /* =================== COMPONENT FUNCTIONS ===================== */
+
+  /* HANDLE FIELD CHANGED ----------------------  */
   const onFieldChange = (event) => {
     setAccount({ ...account, [event.target.name]: event.target.value });
   };
 
-  /*  Handle Login  */
+  /* HANDLE LOGIN ---------------------- */
   const login = async (e) => {
     e.preventDefault();
     dispatch(
@@ -43,12 +47,12 @@ const Login = () => {
     );
   };
 
+  /* NAVIGATE TO REGISTER ROUTE ---------------------- */
   const onNavRegister = () => {
-    navigate("/register")
-  }
+    navigate("/register");
+  };
 
   if (state.user.data !== null) return <Navigate to="/" />;
-
   return (
     <div className="Login">
       <div className="login-container">
@@ -109,7 +113,9 @@ const Login = () => {
                 đăng nhập
               </div>
               <span className="or">Hoặc</span>
-              <span className="register-link" onClick={onNavRegister}>Đăng kí ngay</span>
+              <span className="register-link" onClick={onNavRegister}>
+                Đăng kí ngay
+              </span>
             </div>
           </div>
         </div>
@@ -126,26 +132,8 @@ const Login = () => {
   );
 };
 
-const styles = {
-  button: {
-    background: "linear-gradient(to right, #5890FF, #1877F2)",
-    color: "white",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "5px",
-    width: "225px",
-  },
-  logo: {
-    width: "450px",
-    margin: "20px 0 20px 20px",
-  },
-  h1: {
-    fontFamily: "Grey Qo, cursive",
-    marginTop: "150px",
-  },
-  formControl: {
-    width: "100%",
-  },
-};
+
+
+
 
 export default Login;

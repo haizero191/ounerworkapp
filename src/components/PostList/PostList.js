@@ -6,16 +6,13 @@ import { useSelector } from "react-redux";
 const PostList = ({ data }) => {
   const state = useSelector((state) => state);
 
-
-  useEffect(() => {
-    
-  }, [state]);
-
   return (
     <div className="PostList">
       <div className="post-list__inner">
-        {data && data.map((post) => {
-          return <PostCard data={post} key={'post-card-' + post.id}/>;
+        {data && (data.length > 0) && data.map((post) => {
+          return <div key={'post-list-' + post.id}>
+            <PostCard data={post} />
+          </div>;
         })}
       </div>
     </div>

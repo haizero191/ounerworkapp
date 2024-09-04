@@ -30,11 +30,17 @@ const Home = () => {
     }
   }, [state.profile]);
 
+  // Change data when state updated
+  useEffect(() => {
+    if (state.posts.data) {
+      setPosts(state.posts.data);
+    }
+  }, [state.posts]);
+
   // Initial Functional
   useEffect(() => {
     // Get Post
     dispatch(POST_ACTION_GETALL());
-
     // Get profile user login
     if (token && getPayloadFromJWT(token) != null) {
       dispatch(
@@ -43,14 +49,10 @@ const Home = () => {
         })
       );
     }
+
   }, []);
 
-  // Change data when state updated
-  useEffect(() => {
-    if (state.posts.data) {
-      setPosts(state.posts.data);
-    }
-  }, [state.posts]);
+
 
   const getPayloadFromJWT = (token) => {
     // Here, you might want to decode the token and check for its expiration, etc.
@@ -63,8 +65,17 @@ const Home = () => {
     }
   };
 
+  // Create post button click
   const onCreatePost = () => {
     setIsCreatedForm((isCreatedForm) => (isCreatedForm = !isCreatedForm));
+  };
+
+  // Listen post saved
+  const onPostSaved = (data) => {
+    if (data) {
+      alert("Post created");
+      setIsCreatedForm(false);
+    }
   };
 
   return (
@@ -74,29 +85,31 @@ const Home = () => {
           {/* Post Create UI */}
           {isCreatedForm && (
             <Col xs={6}>
-              <PostCreateForm />
+              <PostCreateForm onSave={onPostSaved} />
             </Col>
           )}
 
           {/* Post UI */}
-          <Col xs={6} style={{paddingTop: "32px", paddingBottom: "50px"}}>
+          <Col xs={6} style={{ paddingTop: "32px", paddingBottom: "50px" }}>
             <div className="reel-section">
               <ReelBoard />
             </div>
-            <div className="content-section" >
+            <div className="content-section">
               <PostList data={posts} />
             </div>
           </Col>
 
           {/* Personal summary UI */}
           {!isCreatedForm && (
-            <Col xs={3}  style={{paddingTop: "32px", paddingBottom: "50px"}}>
+            <Col xs={3} style={{ paddingTop: "32px", paddingBottom: "50px" }}>
               <div className="personal-side">
-                <div className="mini-profile">
-                  <MiniProfile data={profile} />
-                </div>
-                <div className="mini-friendship">
-                  <MiniFriendship />
+                <div className="personal-side_container">
+                  <div className="mini-profile">
+                    <MiniProfile data={profile} />
+                  </div>
+                  <div className="mini-friendship">
+                    <MiniFriendship />
+                  </div>
                 </div>
               </div>
             </Col>
@@ -108,12 +121,12 @@ const Home = () => {
         {!isCreatedForm ? (
           <>
             <span>Tạo bài viết mới</span>
-            <i class="bi bi-plus"></i>
+            <i className="bi bi-plus"></i>
           </>
         ) : (
           <>
             <span>Đóng</span>
-            <i class="bi bi-x"></i>
+            <i className="bi bi-x"></i>
           </>
         )}
       </div>

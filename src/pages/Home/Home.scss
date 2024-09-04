@@ -31,4 +31,16 @@
             user-select: none;
         }
     }
+
+    .personal-side {
+        height: 100%;
+        position: relative;
+        .personal-side_container {
+            position: sticky;
+            top: 24px;
+            .mini-profile {
+                margin-bottom: 30px;
+            }
+        }
+    }
 }

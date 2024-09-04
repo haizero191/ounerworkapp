@@ -15,8 +15,6 @@ class ControlledEditor extends Component {
 
   onEditorStateChange = (editorState) => {
     const htmlContent = stateToHTML(this.state.editorState.getCurrentContent());
-
-
     this.setState({
         htmlContent: htmlContent
     })

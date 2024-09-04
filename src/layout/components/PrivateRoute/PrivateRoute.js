@@ -6,6 +6,7 @@ import sessions from "react-cookies";
 const PrivateRoute = ({ children }) => {
   // Check if JWT exists in session storage (or local storage)
   const token = sessions.load('access-token'); 
+  
   // Validate the token (you may need to implement a token validation function)
   const isTokenValid = () => {
     if (!token) return false;
@@ -19,16 +20,6 @@ const PrivateRoute = ({ children }) => {
     }
   };
 
-  const isApproved = () => {
-    if (!token) return false;
-    // Here, you might want to decode the token and check for its expiration, etc.
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.isApproved;
-    } catch (e) {
-      return false;
-    }
-  }
 
   return isTokenValid() ? ( children ) : <Navigate to="/login" />;
 };

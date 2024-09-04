@@ -1,6 +1,39 @@
 .Profile {
     position: relative;
     overflow-x: hidden;
+    padding: 32px 0px;
+    .blank-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80vh;
+        gap: 40px;  
+        .blank-image {
+            width: 400px;
+            img {
+                width: 100%;
+            }
+        }
+        .blank-text {
+            font-size: 18px;
+            p {
+                margin: 0;
+                text-align: center;
+            }
+        }
+
+        .blank-profile-update {
+            button {
+                border: none;
+                outline: none;
+                padding: 10px 26px;
+                border-radius: 6px;
+                background-color: #17729d;
+                color: white;
+            }
+        }
+    }
     .user-information {
         min-height: 580px;
         margin-bottom: 40px;

@@ -23,19 +23,23 @@ const MiniProfile = ({ data }) => {
     }
   };
 
+  const navProfile = () => {
+    navigate("/profile");
+  }
+
   return (
     <div className="MiniProfile">
       {data && (
         <>
           <div className="mini-profile_info">
-            <div className="avatar">
-              <img src={data.avatar.url} />
+            <div className="avatar" onClick={navProfile}>
+              <img src={data && data.avatar ? data.avatar.url : "https://www.flykovalam.com/images/team/01.jpg"} />
             </div>
             <div className="info">
               <p>
                 {data.firstName} {data.lastName}
               </p>
-              <p>{data.spec.major.name}</p>
+              <p>{data && data.spec ? data.spec.major.name: "Updating..."}</p>
             </div>
           </div>
           <div className="mini-profile_logout" onClick={logout}>

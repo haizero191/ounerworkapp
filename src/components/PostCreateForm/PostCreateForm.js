@@ -6,22 +6,16 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { stateToHTML } from "draft-js-export-html";
 import { encryptHTML } from "../../utils/Crypto";
 import { apiCaller, endpoints } from "../../configs/APIs";
-import cookie from "react-cookies"
+import cookie from "react-cookies";
+import { useDispatch, useSelector } from "react-redux";
+import { POST_ACTION_CREATE } from "../../redux/actions/post.action";
 
-
-
-const PostCreateForm = () => {
+const PostCreateForm = ({ onSave }) => {
   const [files, setFiles] = useState([]);
   const [htmlContentEncoded, setHtmlContentEncoded] = useState("");
   const [images, setImages] = useState([]);
-
-  useEffect(() => {
-    console.log(htmlContentEncoded);
-  }, [htmlContentEncoded]);
-
-  useState(() => {
-    console.log(images);
-  }, [images]);
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   /* Listen Editor changed */
   const onEditorStateChange = (editorState) => {
@@ -29,8 +23,8 @@ const PostCreateForm = () => {
     setHtmlContentEncoded(encryptHTML(htmlContent));
   };
 
-  /* Send request */
-  const createPost = async () => {
+  /* Create new form data with content and files */
+  const createFormData = () => {
     // Tạo một đối tượng FormData
     const formData = new FormData();
     // Thêm các tệp tin vào FormData
@@ -39,43 +33,17 @@ const PostCreateForm = () => {
         formData.append("files", files[i]);
       }
     }
-    // Thêm nội dung vào FormData
     formData.append("content", htmlContentEncoded);
+    return formData;
+  };
 
-    const token = cookie.load("access-token")
-    ? cookie.load("access-token")
-    : null;
-
-    var api = apiCaller(endpoints["posts_create"], {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': 'Bearer ' + token
-      }
-    })
-
-    
-    var response = await api.post(formData);
-
-
-    console.log(response)
-
-    // // Gửi yêu cầu POST
-    // return axios
-    //   .post(url, formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     // Xử lý kết quả thành công
-    //     console.log("Success:", response.data);
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     // Xử lý lỗi
-    //     console.error("Error:", error);
-    //     throw error;
-    //   });
+  /* Send request */
+  const createPost = async () => {
+    dispatch(
+      POST_ACTION_CREATE({
+        form: createFormData(),
+      })
+    );
   };
 
   /* Listen Files Selected */
@@ -88,7 +56,6 @@ const PostCreateForm = () => {
       const file = event.target.files[i];
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log(reader.result);
         imageUrls.push(reader.result);
 
         if (imageUrls.length === event.target.files.length) {
@@ -109,7 +76,6 @@ const PostCreateForm = () => {
   return (
     <div className="PostCreateForm">
       <div className="post-create_container">
-
         <div className="title">
           <h3>Tạo bài viết mới</h3>
           <p>
