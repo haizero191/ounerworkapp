@@ -3,7 +3,7 @@ import "./PostCard.scss";
 import { decryptHTML } from "../../utils/Crypto";
 
 import GridOne from "../ImageLayout/GridOne/GridOne";
-import { POST_ACTION_REACTION } from "../../redux/actions/post.action";
+import { POST_ACTION_COMMENT_CREATE, POST_ACTION_COMMENT_GETALL, POST_ACTION_REACTION } from "../../redux/actions/post.action";
 import { useDispatch, useSelector } from "react-redux";
 import ThunThunIcon from "../../assets/images/thun_thun_reaction_icon.png";
 import SadIcon from "../../assets/images/sad_reaction_icon.png";
@@ -11,19 +11,24 @@ import LikeIcon from "../../assets/images/like_reaction_icon.png";
 import HahaIcon from "../../assets/images/haha_reaction_icon.png";
 import LikeFIcon from "../../assets/images/likef_reaction_icon.png";
 import RenderReactionUI from "./RenderReactionUI/RenderReactionUI";
+import { POST_ACTION_SHOWMODAL_DETAIL } from "../../redux/actions/simp.action";
 
 const PostCard = ({ data }) => {
+  // REDUX STATE
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
+  // COMPONENT STATS
   const [clickTimeout, setClickTimeout] = useState(null);
-  const dispatchDelay = 500;
   const [emotion, setEmotion] = useState("DEFAULT");
-
+  const [comment, setComment] = useState("");
+  const [commentSelfList, setCommentSelfList] = useState([]);
   const [reaction, setReaction] = useState({
     isInteracted: false,
     emotion: "DEFAULT",
     number: 0,
   });
+  // COMPONENT VARIABLES
+  const dispatchDelay = 500;
 
   /* =================== COMPONENT LIFECYCLE ===================== */
 
@@ -64,7 +69,6 @@ const PostCard = ({ data }) => {
     summaryContentElem.style.maxHeight = "fit-content";
     summaryContentElem.style.overflow = "auto";
     contentElm.dangerouslySetInnerHTML = data.content;
-    // ẩn xem thêm
     detailBtnElm.style.display = "none";
   };
 
@@ -77,13 +81,30 @@ const PostCard = ({ data }) => {
     return diffInHours;
   };
 
+  const getDaysInCurrentYear = () => {
+    const year = new Date().getFullYear(); // Lấy năm hiện tại
+    const start = new Date(year, 0, 1); // Ngày đầu tiên của năm
+    const end = new Date(year + 1, 0, 1); // Ngày đầu tiên của năm tiếp theo
+    const diff = end - start; // Sự khác biệt về thời gian tính bằng milliseconds
+    const days = diff / (1000 * 60 * 60 * 24); // Chuyển đổi milliseconds sang ngày
+    return days;
+  };
+
+  const getDaysInCurrentMonth = () => {
+    const date = new Date(); // Lấy ngày hiện tại
+    const year = date.getFullYear(); // Lấy năm hiện tại
+    const month = date.getMonth(); // Lấy tháng hiện tại (0-11)
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return daysInMonth;
+  };
+
   /* CONVERT TO SINCE POST CREATED ------------------- */
   const convertTimeSince = (time) => {
     var hours = Math.floor(convertTimeToHours(time));
     var minutes = Math.floor((convertTimeToHours(time) - hours) * 60); // Tính số phút
     const hoursInADay = 24;
-    const daysInAMonth = 30;
-    const daysInAYear = 365;
+    const daysInAMonth = getDaysInCurrentMonth();
+    const daysInAYear = getDaysInCurrentYear();
 
     if (hours >= hoursInADay * daysInAYear) {
       const years = Math.floor(hours / (hoursInADay * daysInAYear));
@@ -101,20 +122,25 @@ const PostCard = ({ data }) => {
     }
   };
 
+  const convertHTMLToText = (html) => {
+    var tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    var textContent = tempDiv.textContent || tempDiv.innerText || "";
+    return textContent.trim();
+  };
+
   /* INNER HTML ------------------- */
   const HtmlContent = ({ html }) => {
     return <div dangerouslySetInnerHTML={{ __html: html }} />;
   };
 
   /* HANDLE REACTION TO POST ------------------- */
-  const onReactionClicked = (postId, type) => {
+  const onReactionClicked = (type) => {
     // Clear timeout action if user spam
     if (clickTimeout) {
       clearTimeout(clickTimeout);
     }
-
     var currentEmotion = reaction.emotion !== type ? type : "DEFAULT";
-
     if (type === "DEFAULT") {
       // SET CLIENT DEFAUTL
       setReaction({
@@ -123,7 +149,7 @@ const PostCard = ({ data }) => {
         isInteracted: true,
         number: reaction.number + 1,
       });
-      currentEmotion = "LOVE"
+      currentEmotion = "LOVE";
     } else {
       // SET CLIENT EMOTION
       setReaction({
@@ -141,22 +167,12 @@ const PostCard = ({ data }) => {
           ? reaction.number
           : reaction.number - 1,
       });
-      currentEmotion = reaction.emotion !== type ? type : "DEFAULT"
+      currentEmotion = reaction.emotion !== type ? type : "DEFAULT";
     }
-
-
-
-
 
     // tạo timeout block spam
     const newTimeout = setTimeout(() => {
-
-
-      console.log("last emotion: ", emotion);
-      console.log("current emotion", currentEmotion)
-
-      if(emotion === currentEmotion){
-        console.log("BLOCKED")
+      if (emotion === currentEmotion) {
         return;
       }
 
@@ -178,20 +194,63 @@ const PostCard = ({ data }) => {
         );
       }
 
-      console.log("before set emotion")
+      console.log("before set emotion");
 
-      setEmotion(currentEmotion)
+      setEmotion(currentEmotion);
     }, dispatchDelay);
 
     setClickTimeout(newTimeout);
   };
+
+  /* SET COMMENT CHANGE ------------------- */
+  const onCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  /* HANDLE SEND COMMENT TO POST ------------------- */
+  const onSendComment = () => {
+    if (comment.length === 0 || comment === "") {
+      return;
+    }
+
+    dispatch(POST_ACTION_COMMENT_CREATE({
+      postId: data.id,
+      content: comment
+    }))
+
+
+
+    var arrayList = commentSelfList;
+    arrayList.push(comment);
+    setCommentSelfList([...arrayList]);
+    setComment("");
+  };
+
+  /* LISTEN ENTER PRESS ------------------- */
+  const handleCommentKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onSendComment();
+    }
+  };
+
+  /* HANDLE VIEW ALL COMMENT CLICKED ------------------- */
+  const onViewAllComment = () => {
+    dispatch(POST_ACTION_COMMENT_GETALL({
+      postId: data.id
+    }))
+
+
+    dispatch(POST_ACTION_SHOWMODAL_DETAIL({
+      postId: data.id
+    }))
+  }
 
   return (
     <div className="PostCard">
       <div className="post-card">
         <div className="post-card_header">
           <div className="avatar">
-            <img src={data.owner.profile.avatar.url} />
+            <img src={data.owner.profile.avatar.url} alt="avartar" />
           </div>
           <div className="info">
             <p className="name">
@@ -232,46 +291,38 @@ const PostCard = ({ data }) => {
           <div className="reaction-icons">
             <div className="icon emotions">
               <div className="reaction-icons_container">
-                {/* <div
-                  className="icon-more"
-                  onClick={() => onReactionClicked(data.id, "LIKE")}
-                >
-                  <img
-                    className="just-like"
-                    src={LikeFIcon}
-                    style={{ transform: "rotateZ(90deg) scale(1)" }}
-                    alt="just-like"
-                  />
-                </div> */}
-
                 <div
                   className="icon-more"
-                  onClick={() => onReactionClicked(data.id, "LOVE")}
+                  onClick={() => onReactionClicked("LOVE")}
                 >
                   <i className="bi bi-heart-fill"></i>
                 </div>
-                <div className="icon-more"  onClick={() => onReactionClicked(data.id, "LIKE")}>
-                  <img src={LikeIcon} />
+                <div className="icon-more">
+                  <img
+                    src={LikeIcon}
+                    alt="like"
+                    onClick={() => onReactionClicked("LIKE")}
+                  />
                 </div>
 
                 <div className="icon-more">
                   <img
                     src={HahaIcon}
-                    onClick={() => onReactionClicked(data.id, "HAHA")}
+                    onClick={() => onReactionClicked("HAHA")}
                     alt="haha"
                   />
                 </div>
                 <div className="icon-more">
                   <img
                     src={ThunThunIcon}
-                    onClick={() => onReactionClicked(data.id, "THUNTHUN")}
+                    onClick={() => onReactionClicked("THUNTHUN")}
                     alt="thunthun"
                   />
                 </div>
                 <div className="icon-more">
                   <img
                     src={SadIcon}
-                    onClick={() => onReactionClicked(data.id, "SAD")}
+                    onClick={() => onReactionClicked("SAD")}
                     alt="sad"
                   />
                 </div>
@@ -309,15 +360,56 @@ const PostCard = ({ data }) => {
               </span>
             </span>
           </span>
-          <span className="detailed-btn" onClick={onViewDetailContent}>
-            Xem thêm
-          </span>
+          {convertHTMLToText(decryptHTML(data.content)).length > 180 && (
+            <span className="detailed-btn" onClick={onViewDetailContent}>
+              Xem thêm
+            </span>
+          )}
         </div>
-        <div className="number-comment">
-          <p>{data.commentNumber} bình luận về bài viết này</p>
+        <div className="number-comment" onClick={onViewAllComment}>
+          {data.commentNumber !== 0 && (
+            <p>Xem thêm {data.commentNumber} bình luận</p>
+          )}
+        </div>
+        <div className={"post-card_comment--self " + (commentSelfList.length > 0 ? "comment-padding" : "") }>
+          {commentSelfList.map((comment, index) => {
+            return (
+              <div className="comment-self_item" key={"self-comment_" + index}>
+                <div className="commentor">
+                  <img src={state.profile.data.avatar.url} />
+                </div>
+                <div className="comment-info">
+                  <span>
+                    {state.profile.data
+                      ? getFullName(
+                          state.profile.data.firstName,
+                          state.profile.data.lastName
+                        )
+                      : "Unknow"}
+                  </span>
+                  <span>{comment}</span>
+                  <div className="comment-actions">
+                    <div className="comment-created">Vừa xong</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <div className="post-card_comments">
-          <input type="text" placeholder="Thêm bình luận ..." />
+          <input
+            type="text"
+            placeholder="Thêm bình luận ..."
+            name="comment"
+            value={comment}
+            onChange={onCommentChange}
+            onKeyDown={handleCommentKeyDown}
+          />
+          {comment !== "" && (
+            <div className="send-btn" onClick={onSendComment}>
+              <i className="bi bi-arrow-up-square-fill"></i>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ const ReactionIcon = ({ icon, onClick }) => (
 const RenderReactionUI = React.memo(
   ({ reactionType, target, onReactionClicked, isInteracted }) => {
     const handleClick = (reaction) => {
-      onReactionClicked(target.id, reaction);
+      onReactionClicked(reaction);
     };
 
     const renderIcon = () => {

@@ -18,9 +18,7 @@ import PrivateRoute from "./layout/components/PrivateRoute/PrivateRoute";
 import Profile from "./pages/Profile/Profile";
 import Register from "./pages/Register/Register";
 import ProfileEdit from "./pages/Profile/ProfileEdit/ProfileEdit";
-
-
-
+import Detail from "./pages/Detail/Detail";
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
@@ -32,7 +30,6 @@ const App = () => {
 
   const token = cookies.load("access-token");
 
-
   useEffect(() => {
     ensureUserAprroved();
   }, [location]);
@@ -43,19 +40,19 @@ const App = () => {
       const isConfirmed = window.confirm(
         "Tài khoản của bạn chưa được quản trị viên phê duyệt. Hoàn thành hồ sơ cá nhân của bạn chính xác và chờ xác nhận nha :>"
       );
-      if(isConfirmed) {
+      if (isConfirmed) {
         setTimeout(() => {
           navigate("/profile");
         }, 500);
       }
     }
-  }
+  };
   const isTokeApproved = () => {
-    return (cookies.load("isApproved") === "false" && approvedPath.includes(location.pathname))
-  }
-
-
-  
+    return (
+      cookies.load("isApproved") === "false" &&
+      approvedPath.includes(location.pathname)
+    );
+  };
 
   return (
     <Routes>
@@ -69,6 +66,7 @@ const App = () => {
         }
       >
         <Route index element={<Home />} />
+        <Route path="/detail/:postId" element={<Detail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/edit" element={<ProfileEdit />} />
       </Route>

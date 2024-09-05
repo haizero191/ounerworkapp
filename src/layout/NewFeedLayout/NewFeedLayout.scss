@@ -1,6 +1,9 @@
 .NewFeedLayout {
     min-height: 100vh;
     height: 100vh;
+    position: relative;
+    width: 100vw;
+    overflow-x: hidden;
     .layout-main {
         display: flex;
         height: fit-content;

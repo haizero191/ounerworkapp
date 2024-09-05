@@ -15,25 +15,29 @@ import { PROFILE_ACTION_GET } from "../../redux/actions/profile.action";
 import PostCreateForm from "../../components/PostCreateForm/PostCreateForm";
 
 const Home = () => {
+  // REDUX STATE
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  // COMPONENT STATE
   const [posts, setPosts] = useState([]);
   const [profile, setProfile] = useState();
   const [isCreatedForm, setIsCreatedForm] = useState(false);
+  
 
-  /* Get cookies state - access token */
+  // COMPONENT VARIABLES
   const token = cookies.load("access-token");
 
+  /* =================== COMPONENT LIFE CYCLE ===================== */
   useEffect(() => {
     if (state.profile && state.profile.data) {
       setProfile(state.profile.data);
     }
-  }, [state.profile]);
+  }, [state.profile])
 
   // Change data when state updated
   useEffect(() => {
     if (state.posts.data) {
-      setPosts(state.posts.data);
+      setPosts(state.posts.data)
     }
   }, [state.posts]);
 
@@ -49,11 +53,11 @@ const Home = () => {
         })
       );
     }
-
   }, []);
 
+  /* =================== COMPONENT FUNCTIONS ===================== */
 
-
+  /* GET PAYLOAD FROM JWT TOKEN ------------------- */
   const getPayloadFromJWT = (token) => {
     // Here, you might want to decode the token and check for its expiration, etc.
     try {
@@ -65,12 +69,12 @@ const Home = () => {
     }
   };
 
-  // Create post button click
+  /* HANDLE CREATE POST BUTTON CLICKED ------------------- */
   const onCreatePost = () => {
     setIsCreatedForm((isCreatedForm) => (isCreatedForm = !isCreatedForm));
   };
 
-  // Listen post saved
+  /* HANDLE CREATE A NEW POST ------------------- */
   const onPostSaved = (data) => {
     if (data) {
       alert("Post created");
@@ -82,6 +86,7 @@ const Home = () => {
     <div className="Home">
       <Container>
         <Row className="justify-content-md-center">
+
           {/* Post Create UI */}
           {isCreatedForm && (
             <Col xs={6}>
@@ -116,7 +121,6 @@ const Home = () => {
           )}
         </Row>
       </Container>
-
       <div className="post-create-btn" onClick={onCreatePost}>
         {!isCreatedForm ? (
           <>

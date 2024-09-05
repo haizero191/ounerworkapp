@@ -1,28 +1,33 @@
 import axios from "axios";
 import cookie from "react-cookies";
-// import cookie from "react-cookies"
-
 const BASE_URL = "http://localhost:8080/ounetworksv/api/";
 
+
+// Endpoint config
 export const endpoints = {
   login: "v1/public/auth/login",
   register: "/v1/public/auth/register",
   posts: {
     get: "/v1/private/posts/get",
     create: "/v1/private/posts/create",
-    reaction: "/v1/private/posts/reaction"
+    reaction: "/v1/private/posts/reaction",
+    comment: {
+      create: "/v1/private/posts/comment/to",
+      get: "/v1/private/posts/comments/of"
+    },
   },
-
   profile_public: "/v1/public/profile/get",
   profile_private: ""
 };
 
+
+/* API CALLER ------------------- */
 export const apiCaller = (endpoint, options = {}) => {
   const token = cookie.load("access-token")
     ? cookie.load("access-token")
     : null;
 
-  // Kiểm tra nếu endpoint có chứa "public" thì thêm Authorization header
+  // Kiểm tra nếu endpoint có chứa "private" thì thêm Authorization header
   const headers = {
     "Content-Type": "application/json",
     ...(endpoint.includes("private") && token
@@ -30,8 +35,6 @@ export const apiCaller = (endpoint, options = {}) => {
       : {}),
     ...options.headers,
   };
-
-
 
   // Tạo instance của Axios với cấu hình
   const apiInstance = axios.create({

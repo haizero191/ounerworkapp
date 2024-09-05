@@ -5,8 +5,8 @@ import profileSlice from './reducers/profile.slice'
 
 export default configureStore({
   reducer: {
-    posts: postSlice, 
+    profile: profileSlice.reducer,
+    posts: postSlice.reducer, 
     user: userSlice.reducer,
-    profile: profileSlice
   },
 })

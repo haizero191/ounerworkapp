@@ -30,8 +30,6 @@ export const USER_ACTION_LOGIN = createAsyncThunk(
 
       console.log("ERROR_BOX", ERROR_BOX)
 
-
-
       // if (error.response) {
       //   // Nếu server trả về lỗi (ví dụ: 400, 401, 500)
       //   errorMessage = error.response.data?.message || "Login failed.";
@@ -94,5 +92,3 @@ export const USER_ACTION_REGISTER = createAsyncThunk(
 );
 
 export const { clearState: USER_ACTION_STATE_CLEAR } = userSlice.actions;
-
-

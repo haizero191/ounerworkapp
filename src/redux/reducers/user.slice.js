@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { USER_ACTION_LOGIN, USER_ACTION_REGISTER } from '../actions/user.action';
 
